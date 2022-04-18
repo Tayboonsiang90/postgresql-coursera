@@ -39,10 +39,19 @@ DATE_TRUNC('day', NOW() + INTERVAL '1 day')
 SELECT DISTINCT ON (model) make, model FROM racing;
 SELECT COUNT(abbrev), abbrev FROM pg_timezone_names GORUP BY abbrev;
 -- where is before, having is after 
-SELECT COUNT(abbrev), abbrev FROM pg_timezone_names WHERE is_dst= "t' GROUP BY abbrev HAVING COUNT(abbrev) > 10;
+SELECT COUNT(abbrev), abbrev FROM pg_timezone_names WHERE is_dst= "t" GROUP BY abbrev HAVING COUNT(abbrev) > 10;
 
 -- subqueries
 
+-- concurrency
+-- ATOMICITY
+UPDATE fav SET howmuch=howmuch+1
+WHERE post_id = 1 AND account_id = 1
+RETURNING *;
+
+ON CONFLICT (post_id, account_id)
+DO UPDATE SET howmuch = fav.howmuch + 1
+RETURNING *;
 
 
 
